@@ -1,0 +1,82 @@
+---
+title: "Teachin Notebooks"
+output: html_notebook
+---
+
+#Analysis of a randomly chosen survey from the harvard dataverse.
+The survey is part of a [dataset](doi:10.7910/DVN/YG9IID).
+The goal is here to laod the survey, analyse the mean age and standard deviation for each age.
+Finally, a plot should present the result.
+
+##Step 1 Are all neccessary libraries installed?
+Otherwise instalkl them. Make sure to update all libraries to the newest version before trying this.
+For this you can use the installr package.
+With the include false command this step is not shown in your report later...
+```{r, include=FALSE}
+rm(list=ls())
+#check for packages
+list.of.packages <- c("tidyverse", "devtools","readxl","rio","knitr")
+new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
+if(length(new.packages)) install.packages(new.packages)
+#devtools to install datverse package
+list.of.packages <- c("dataverse")
+new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
+if(length(new.packages)) {
+  library(devtools)
+  devtools::install_github("IQSS/dataverse-client-r")
+}
+```
+##Step 2 Load necessary libraries
+```{r,echo=F}
+library(dataverse)
+library(readxl)
+library(tidyverse)
+library(rio)
+library(knitr)
+```
+
+##Step 3 Get data from the Havard dataverse and save it in the variable dat
+```{r}
+#get the dataset overview
+get_dataset("doi:10.7910/DVN/YG9IID")
+#read in the file
+f <- get_file("anonymized_survey.csv", "doi:10.7910/DVN/YG9IID")
+# load it into memory
+tmp <- tempfile(fileext = ".csv")
+writeBin(as.vector(f), tmp)
+#get data file
+dat <- rio::import(tmp)
+rm(f,tmp)
+dat$
+```
+
+##Step 4 Analyse data
+Here two variables are important. year_born and Sex.
+```{r}
+current.year<-as.integer(format(Sys.Date(),"%Y"))
+plot.dat<-
+  dat %>% 
+  mutate(age=current.year-year_born) %>% 
+  filter(age>0&age<100) %>% #remove outliers
+  group_by(Sex) %>% 
+  summarise(mean_age=mean(age),
+            sd_age=sd(age),
+            N=n(),
+            se_age=sd_age/sqrt(N))
+kable(plot.dat,digits=2)
+```
+
+##Step 5 Plot the result with gender appropriate colours...
+
+```{r}
+ggplot(aes(y=mean_age,x=Sex,fill=Sex),data=plot.dat)+geom_bar(stat="identity")+geom_errorbar(aes(ymin=mean_age-se_age,ymax=mean_age+se_age,width=0.2))+theme_classic()+xlab("Gender")+ylab("Mean Age")+scale_fill_manual(values=c("pink","blue"))+theme(legend.position = "none")
+```
+
+
+
+
+
+
+
+
+
