@@ -64,16 +64,19 @@ Step 4 Analyse data
 Here two variables are important. year\_born and Sex.
 
 ``` r
+#format the year variable
 current.year<-as.integer(format(Sys.Date(),"%Y"))
+#use dply and pipe operator to crete data frame to plot later
 plot.dat<-
-  dat %>% 
-  mutate(age=current.year-year_born) %>% 
-  filter(age>0&age<100) %>% #remove outliers
-  group_by(Sex) %>% 
-  summarise(mean_age=mean(age),
+  dat %>% #use initial data frame
+  mutate(age=current.year-year_born) %>% #create a new variable by calculating the age
+  filter(age>0&age<100) %>% #remove outliers (some pps gave an age that was too high or negative)
+  group_by(Sex) %>% #group the following analysis by pp  sex
+  summarise(mean_age=mean(age), #create summary variables (mean and sd)
             sd_age=sd(age),
             N=n(),
             se_age=sd_age/sqrt(N))
+#print the resulting dataframe in a table
 kable(plot.dat,digits=2)
 ```
 
@@ -86,7 +89,14 @@ Step 5 Plot the result with gender stereotyping colours...
 ----------------------------------------------------------
 
 ``` r
-ggplot(aes(y=mean_age,x=Sex,fill=Sex),data=plot.dat)+geom_bar(stat="identity")+geom_errorbar(aes(ymin=mean_age-se_age,ymax=mean_age+se_age,width=0.2))+theme_classic()+xlab("Gender")+ylab("Mean Age")+scale_fill_manual(values=c("pink","blue"))+theme(legend.position = "none")
+ggplot(aes(y=mean_age,x=Sex,fill=Sex),data=plot.dat)+ #set the aesthetics
+  geom_bar(stat="identity")+ #make a bar plot
+  geom_errorbar(aes(ymin=mean_age-se_age,ymax=mean_age+se_age,width=0.2))+ #and add error bars
+  theme_classic()+ #use the classic theme to remove clutter
+  xlab("Gender")+ #add axis labels
+  ylab("Mean Age")+
+  scale_fill_manual(values=c("pink","blue"))+ #set the colour of bars manually
+  theme(legend.position = "none") #no legend needed
 ```
 
 ![](teaching_notebook_files/figure-markdown_github/unnamed-chunk-5-1.png)
