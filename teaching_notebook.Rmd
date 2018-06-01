@@ -1,6 +1,6 @@
 ---
-title: "Teachin Notebooks"
-output: html_notebook
+title: "Teaching Notebooks"
+output: github_document
 ---
 
 #Analysis of a randomly chosen survey from the harvard dataverse.
@@ -9,7 +9,7 @@ The goal is here to laod the survey, analyse the mean age and standard deviation
 Finally, a plot should present the result.
 
 ##Step 1 Are all neccessary libraries installed?
-Otherwise instalkl them. Make sure to update all libraries to the newest version before trying this.
+Otherwise install them. Make sure to update all libraries to the newest version before trying this.
 For this you can use the installr package.
 With the include false command this step is not shown in your report later...
 ```{r, include=FALSE}
@@ -26,7 +26,7 @@ if(length(new.packages)) {
   devtools::install_github("IQSS/dataverse-client-r")
 }
 ```
-##Step 2 Load necessary libraries
+## Step 2 Load necessary libraries
 ```{r,echo=F}
 library(dataverse)
 library(readxl)
@@ -35,8 +35,9 @@ library(rio)
 library(knitr)
 ```
 
-##Step 3 Get data from the Havard dataverse and save it in the variable dat
+## Step3 get data
 ```{r}
+<<<<<<< HEAD
 #get the dataset overview
 get_dataset("doi:10.7910/DVN/YG9IID")
 #read in the file
@@ -48,7 +49,26 @@ writeBin(as.vector(f), tmp)
 dat <- rio::import(tmp)
 rm(f,tmp)
 dat
+=======
+dat<-read.csv("anonymized_survey.csv")
+>>>>>>> 35610868bdfc5b28e6b17b4c57ff65da2b7b3ef6
 ```
+
+
+
+<!-- ##Step 3 Get data from the Havard dataverse and save it in the variable dat -->
+<!-- ```{r} -->
+<!-- #get the dataset overview -->
+<!-- get_dataset("http://dx.doi.org/doi:10.7910/DVN/YG9IID") -->
+<!-- #read in the file -->
+<!-- f <- get_file("anonymized_survey.csv", "http://dx.doi.org/doi:10.7910/DVN/YG9IID") -->
+<!-- # load it into memory -->
+<!-- tmp <- tempfile(fileext = ".csv") -->
+<!-- writeBin(as.vector(f), tmp) -->
+<!-- #get data file -->
+<!-- dat <- rio::import(tmp) -->
+<!-- rm(f,tmp) -->
+<!-- ``` -->
 
 ##Step 4 Analyse data
 Here two variables are important. year_born and Sex.
@@ -66,7 +86,7 @@ plot.dat<-
 kable(plot.dat,digits=2)
 ```
 
-##Step 5 Plot the result with gender appropriate colours...
+##Step 5 Plot the result with gender stereotyping colours...
 
 ```{r}
 ggplot(aes(y=mean_age,x=Sex,fill=Sex),data=plot.dat)+geom_bar(stat="identity")+geom_errorbar(aes(ymin=mean_age-se_age,ymax=mean_age+se_age,width=0.2))+theme_classic()+xlab("Gender")+ylab("Mean Age")+scale_fill_manual(values=c("pink","blue"))+theme(legend.position = "none")
