@@ -14,38 +14,50 @@ Otherwise install them. Make sure to update all libraries to the newest version 
 Step 2 Load necessary libraries
 -------------------------------
 
-    ## Loading tidyverse: ggplot2
-    ## Loading tidyverse: tibble
-    ## Loading tidyverse: tidyr
-    ## Loading tidyverse: readr
-    ## Loading tidyverse: purrr
-    ## Loading tidyverse: dplyr
+    ## -- Attaching packages ----------------------------------------------------------- tidyverse 1.2.1 --
 
-    ## Conflicts with tidy packages ----------------------------------------------
+    ## v ggplot2 2.2.1     v purrr   0.2.4
+    ## v tibble  1.4.2     v dplyr   0.7.4
+    ## v tidyr   0.8.0     v stringr 1.3.0
+    ## v readr   1.1.1     v forcats 0.3.0
 
-    ## filter(): dplyr, stats
-    ## lag():    dplyr, stats
+    ## -- Conflicts -------------------------------------------------------------- tidyverse_conflicts() --
+    ## x dplyr::filter() masks stats::filter()
+    ## x dplyr::lag()    masks stats::lag()
 
 Step3 get data
 --------------
 
 ``` r
+#get the dataset overview
+#be sure to not have a proxy behind a firewall
+get_dataset("doi:10.7910/DVN/YG9IID")
+```
+
+    ## Dataset (126327): 
+    ## Version: 2.0, RELEASED
+    ## Release Date: 2017-05-12T20:21:26Z
+    ## License: CC0
+    ## 13 Files:
+    ##                            label version      id
+    ## 1          anonymized_survey.csv       1 3005330
+    ## 2 Wiki_Founder_Survey_Items.docx       1 3017116
+    ##                                                               contentType
+    ## 1                                                                text/csv
+    ## 2 application/vnd.openxmlformats-officedocument.wordprocessingml.document
+
+``` r
+#read in the file
+f <- get_file("anonymized_survey.csv", "doi:10.7910/DVN/YG9IID")
+# load it into memory
+tmp <- tempfile(fileext = ".csv")
+writeBin(as.vector(f), tmp)
+#get data file
+dat <- rio::import(tmp)
+rm(f,tmp)
 dat<-read.csv("anonymized_survey.csv")
 ```
 
-<!-- ##Step 3 Get data from the Havard dataverse and save it in the variable dat -->
-<!-- ```{r} -->
-<!-- #get the dataset overview -->
-<!-- get_dataset("http://dx.doi.org/doi:10.7910/DVN/YG9IID") -->
-<!-- #read in the file -->
-<!-- f <- get_file("anonymized_survey.csv", "http://dx.doi.org/doi:10.7910/DVN/YG9IID") -->
-<!-- # load it into memory -->
-<!-- tmp <- tempfile(fileext = ".csv") -->
-<!-- writeBin(as.vector(f), tmp) -->
-<!-- #get data file -->
-<!-- dat <- rio::import(tmp) -->
-<!-- rm(f,tmp) -->
-<!-- ``` -->
 Step 4 Analyse data
 -------------------
 
@@ -67,8 +79,8 @@ kable(plot.dat,digits=2)
 
 | Sex    |  mean\_age|  sd\_age|    N|  se\_age|
 |:-------|----------:|--------:|----:|--------:|
-| Female |      25.81|     9.16|  104|     0.90|
-| Male   |      29.26|    12.71|  175|     0.96|
+| Female |      26.81|     9.16|  104|     0.90|
+| Male   |      30.26|    12.71|  175|     0.96|
 
 Step 5 Plot the result with gender stereotyping colours...
 ----------------------------------------------------------
@@ -77,4 +89,4 @@ Step 5 Plot the result with gender stereotyping colours...
 ggplot(aes(y=mean_age,x=Sex,fill=Sex),data=plot.dat)+geom_bar(stat="identity")+geom_errorbar(aes(ymin=mean_age-se_age,ymax=mean_age+se_age,width=0.2))+theme_classic()+xlab("Gender")+ylab("Mean Age")+scale_fill_manual(values=c("pink","blue"))+theme(legend.position = "none")
 ```
 
-![](teaching_notebook_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-5-1.png)
+![](teaching_notebook_files/figure-markdown_github/unnamed-chunk-5-1.png)
