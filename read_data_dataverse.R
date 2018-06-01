@@ -25,3 +25,9 @@ writeBin(as.vector(f), tmp)
 #get data file
 dat <- rio::import(tmp)
 rm(f,tmp)
+
+
+
+write.csv(data.ddm,"ddm_data.csv",row.names = F)
+
+

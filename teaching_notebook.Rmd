@@ -47,7 +47,7 @@ writeBin(as.vector(f), tmp)
 #get data file
 dat <- rio::import(tmp)
 rm(f,tmp)
-dat$
+dat
 ```
 
 ##Step 4 Analyse data
