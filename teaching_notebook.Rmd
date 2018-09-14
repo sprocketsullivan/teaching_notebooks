@@ -3,12 +3,12 @@ title: "Teaching Notebooks"
 output: github_document
 ---
 
-#Analysis of a randomly chosen survey from the harvard dataverse.
+# Analysis of a randomly chosen survey from the harvard dataverse.
 The survey is part of a [dataset](doi:10.7910/DVN/YG9IID).
-The goal is here to laod the survey, analyse the mean age and standard deviation for each age.
+The goal is here to load the survey, analyse the mean age and standard deviation for each age.
 Finally, a plot should present the result.
 
-##Step 1 Are all neccessary libraries installed?
+## Step 1 Are all neccessary libraries installed?
 Otherwise install them. Make sure to update all libraries to the newest version before trying this.
 For this you can use the installr package.
 With the include false command this step is not shown in your report later...
@@ -53,7 +53,7 @@ dat<-read.csv("anonymized_survey.csv")
 ```
 
 
-##Step 4 Analyse data
+## Step 4 Analyse data
 Here two variables are important. year_born and Sex.
 ```{r}
 #format the year variable
@@ -72,7 +72,7 @@ plot.dat<-
 kable(plot.dat,digits=2)
 ```
 
-##Step 5 Plot the result with gender stereotyping colours...
+## Step 5 Plot the result with gender stereotyping colours...
 
 ```{r}
 ggplot(aes(y=mean_age,x=Sex,fill=Sex),data=plot.dat)+ #set the aesthetics
