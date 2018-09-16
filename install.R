@@ -1,0 +1,5 @@
+install.packages("tidyverse")
+install.packages("devtools")
+install.packages("readxl")
+install.packages("rio")
+install.packages("knitr")
